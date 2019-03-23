@@ -1,0 +1,30 @@
+{
+    "name": "ingenioz-it/php-math",
+    "description": "A maths PHP library that can be used for machine learning",
+    "keywords": ["PHP", "maths", "vector", "machine learning"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "IngeniozIT",
+            "email": "contact@ingenioz.it"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "IngeniozIT\\Math\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IngeniozIT\\Math\\Tests\\": "tests/"
+        }
+    }
+}
