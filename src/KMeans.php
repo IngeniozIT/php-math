@@ -39,11 +39,18 @@ class KMeans
             // Run K-means and store the results
             $this->classify($nbClusters, $maxIterations);
             $runs[] = [
-                $this->avgDistance(),
-                $this->clusters(),
-                $this->centroids(),
+                $this->avgDistanceToCentroids(),
+                $this->clusters,
+                $this->centroids,
                 $this->iteration,
             ];
+
+            print_r([
+                $this->avgDistanceToCentroids(),
+                $this->clusters,
+                $this->centroids,
+                $this->iteration,
+            ]);
 
             if ($nbClusters < 3) {
                 continue;
@@ -81,7 +88,7 @@ class KMeans
 
         // Why would you look for less than 1 cluster ?
         if ($nbClusters < 1) {
-            throw new \Exception('Number of clusters must be at least 1.');
+            throw new \InvalidArgumentException('Number of clusters must be at least 1.');
         }
 
         $nbValues = count($this->values);
@@ -110,7 +117,7 @@ class KMeans
          * @todo cleanup empty clusters & centroids
          */
 
-        ksort($clusters);
+        ksort($this->clusters);
 
         return !$centroidsMoved;
     }
@@ -126,7 +133,7 @@ class KMeans
             // Compute distance to all centroids
             $distances = array_map(
                 function (array $centroid) use ($value): float {
-                    return self::distance($value, $centroid);
+                    return Vector::distance($value, $centroid);
                 },
                 $this->centroids
             );
@@ -143,17 +150,19 @@ class KMeans
             if (empty($cluster)) {
                 // The cluster is empty, respawn its centroid
                 unset($this->centroids[$clusterId]);
-                $this->centroids[$clusterId] = self::kMeansPP($this->values, $this->centroids);
+                $this->centroids[$clusterId] = $this->newCentroid();
                 $centroidsMoved = true;
             } elseif (!$centroidsMoved) {
                 // Place the centroid in the middle of all the points of the cluster
-                $newCentroid = self::mean($cluster);
-                if (0.0 !== self::distance($newCentroid, $this->centroids[$clusterId])) {
+                $newCentroid = Vector::mean($cluster);
+                if (0.0 !== Vector::distance($newCentroid, $this->centroids[$clusterId])) {
                     $this->centroids[$clusterId] = $newCentroid;
                     $centroidsMoved = true;
                 }
             }
         }
+
+        return $centroidsMoved;
     }
 
     /**
@@ -162,7 +171,7 @@ class KMeans
      */
     public function newCentroid(): array
     {
-        $centroids = $this->currentCentroids;
+        $centroids = $this->centroids;
 
         // Compute the distance² between each point and its closest existing centroid
         $distances = array_map(function (array $value) use ($centroids): float {
@@ -181,10 +190,19 @@ class KMeans
             $randomWeight -= $distance;
         }
 
-        return $values[$valueId];
+        return $this->values[$valueId];
     }
 
     // Getters
+
+    /**
+     * Get the values given to KMeans.
+     * @return array The values given to the constructor.
+     */
+    public function values(): array
+    {
+        return $this->values;
+    }
 
     /**
      * Get the number of clusters found in the previous run.
@@ -214,7 +232,7 @@ class KMeans
             foreach ($this->clusters as $clusterId => $cluster) {
                 $sum += Vector::distance(Vector::mean($cluster), $this->centroids[$clusterId]);
             }
-            $this->avgDistance = $sum / count($this->centroid);
+            $this->avgDistance = $sum / count($this->centroids);
         }
 
         return $this->avgDistance;
@@ -240,6 +258,10 @@ class KMeans
      */
     public function centroids(): ?array
     {
+        if (0 === $this->iteration) {
+            return null;
+        }
+
         return $this->centroids;
     }
 }

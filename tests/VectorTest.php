@@ -9,11 +9,6 @@ use IngeniozIT\Math\Vector;
 
 class VectorTest extends TestCase
 {
-    public function testPlaceholder()
-    {
-        $this->assertTrue(true);
-    }
-
     public function testDistance()
     {
         $distances = [
