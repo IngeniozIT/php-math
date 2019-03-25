@@ -33,21 +33,11 @@ class Vector
     }
 
     /**
-     * Get the average of multiple points.
-     * @param array $points A list of vectors representing the points.
-     * @return array
-     */
-    public static function mean(array ...$points): array
-    {
-        return self::scalarDiv(self::sum($points), count($points));
-    }
-
-    /**
      * Get the sum of multiple vectors.
      * @param array $points A list of vectors.
      * @return array
      */
-    public static function sum(array ...$points): array
+    public static function sum(array $points): array
     {
         $sum = array_shift($points);
         foreach ($points as $point) {
@@ -70,6 +60,16 @@ class Vector
             $v /= $nb;
         }
         return $vector;
+    }
+
+    /**
+     * Get the average of multiple points.
+     * @param array $points A list of vectors representing the points.
+     * @return array
+     */
+    public static function mean(array $points): array
+    {
+        return self::scalarDiv(self::sum($points), count($points));
     }
 
     // Inner methods.
