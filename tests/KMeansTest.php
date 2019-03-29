@@ -6,6 +6,7 @@ namespace IngeniozIT\Math\Tests;
 use PHPUnit\Framework\TestCase;
 
 use IngeniozIT\Math\KMeans;
+use IngeniozIT\Math\Vector;
 
 class KMeansTest extends TestCase
 {
@@ -62,21 +63,30 @@ class KMeansTest extends TestCase
     {
         $kMeans->classify(1);
         $this->assertEquals(1, $kMeans->nbClusters());
+        $this->assertEquals([Vector::mean($kMeans->values())], $kMeans->centroids());
+        $this->assertEquals([[2, 42, 50, 200]], $kMeans->clusters());
+        $this->assertEquals(51962, round($kMeans->avgDistanceToCentroids() * 10000));
 
         $kMeans->classify(2);
         $this->assertEquals(2, $kMeans->nbClusters());
+        $centroids = $kMeans->centroids();
+        usort($centroids, function (array $a, array $b) {
+            return array_sum($a) <=> array_sum($b);
+        });
+        $this->assertEquals([[0.25, 1.25, 2.25], [6.25, 7.25, 8.25]], $centroids);
+        $this->assertEquals(4330, round($kMeans->avgDistanceToCentroids() * 10000));
 
         $kMeans->classify(4);
         $this->assertEquals(4, $kMeans->nbClusters());
         $this->assertEquals(0, $kMeans->avgDistanceToCentroids());
     }
 
-    // /**
-    //  * @depends testValues
-    //  */
-    // public function testClassifyAndOptimize(KMeans $kMeans)
-    // {
-    //  $kMeans->classifyAndOptimize();
-    //  $this->assertEquals(2, $kMeans->nbClusters());
-    // }
+    /**
+     * @depends testValues
+     */
+    public function testClassifyAndOptimize(KMeans $kMeans)
+    {
+        $kMeans->classifyAndOptimize();
+        $this->assertEquals(2, $kMeans->nbClusters());
+    }
 }

@@ -30,6 +30,8 @@ class KMeans
      */
     public function classifyAndOptimize(int $maxIterations = null): bool
     {
+        $converged = false;
+
         $nbValues = count($this->values);
 
         $runs = [];
@@ -45,32 +47,28 @@ class KMeans
                 $this->iteration,
             ];
 
-            print_r([
-                $this->avgDistanceToCentroids(),
-                $this->clusters,
-                $this->centroids,
-                $this->iteration,
-            ]);
-
             if ($nbClusters < 3) {
                 continue;
             }
 
             // If the elbow has been reached, store the results and return
             $delta = ($runs[0][0] + $runs[2][0]) / 2 - $runs[1][0];
+
             if ($delta < $previousDelta) {
-                $this->avgDistance = $runs[1][0];
-                $this->clusters = $runs[1][1];
-                $this->centroids = $runs[1][2];
-                $this->iteration = $runs[1][3];
-                return true;
+                $this->avgDistance = $runs[0][0];
+                $this->clusters = $runs[0][1];
+                $this->centroids = $runs[0][2];
+                $this->iteration = $runs[0][3];
+
+                $converged = true;
+                break;
             }
 
             $previousDelta = $delta;
             array_shift($runs);
         }
 
-        return false;
+        return $converged;
     }
 
     /**
@@ -113,10 +111,6 @@ class KMeans
             $centroidsMoved = $this->moveCentroids();
         } while (true === $centroidsMoved && (null === $maxIterations || $this->iteration < $maxIterations));
 
-        /**
-         * @todo cleanup empty clusters & centroids
-         */
-
         ksort($this->clusters);
 
         return !$centroidsMoved;
@@ -140,6 +134,10 @@ class KMeans
 
             // Assign the value to the cluster with the closest centroid
             $this->clusters[array_keys($distances, min($distances))[0]][$valueId] = $value;
+        }
+
+        foreach ($this->clusters as &$cluster) {
+            ksort($cluster);
         }
     }
 
