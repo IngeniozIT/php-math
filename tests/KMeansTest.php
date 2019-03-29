@@ -66,8 +66,8 @@ class KMeansTest extends TestCase
         $kMeans->classify(2);
         $this->assertEquals(2, $kMeans->nbClusters());
 
-        $kMeans->classify(3);
-        $this->assertEquals(3, $kMeans->nbClusters());
+        $kMeans->classify(4);
+        $this->assertEquals(4, $kMeans->nbClusters());
         $this->assertEquals(0, $kMeans->avgDistanceToCentroids());
     }
 

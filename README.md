@@ -10,4 +10,3 @@ A maths PHP library that can be used for machine learning.
 ### @todo
 
 - Unit test KMeans
-- Debug KMeans::avgDistanceToCentroids()

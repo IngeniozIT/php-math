@@ -230,9 +230,11 @@ class KMeans
         if (null === $this->avgDistance) {
             $sum = 0;
             foreach ($this->clusters as $clusterId => $cluster) {
-                $sum += Vector::distance(Vector::mean($cluster), $this->centroids[$clusterId]);
+                foreach ($cluster as $point) {
+                    $sum += Vector::distance($this->centroids[$clusterId], $point);
+                }
             }
-            $this->avgDistance = $sum / count($this->centroids);
+            $this->avgDistance = $sum / count($this->values);
         }
 
         return $this->avgDistance;
