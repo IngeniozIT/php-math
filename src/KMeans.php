@@ -51,7 +51,7 @@ class KMeans
                 continue;
             }
 
-            // If the elbow has been reached, store the results and return
+            // If the elbow has been reached on the previous step, store the results and return
             $delta = ($runs[0][0] + $runs[2][0]) / 2 - $runs[1][0];
 
             if ($delta < $previousDelta) {
