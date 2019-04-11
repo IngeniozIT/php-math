@@ -22,7 +22,7 @@ class ActivationFunction
      */
     public static function binaryStep(float $val): float
     {
-        return $val < 0.0 ? 0.0 : 1.0;
+        return $val > 0.0 ? 1.0 : 0.0;
     }
 
     /**
