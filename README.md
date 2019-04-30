@@ -38,17 +38,15 @@ $kMeans = new KMeans($myValues);
 
 ### classifyAndOptimize(int $maxIterations = null): bool
 Run K-means while finding the right number of clusters.
+Returns true if the clustering strongly converged.
 
 The right number of clusters is found using the elbow method. [More about that.](#elbow-method-implementation)
 
-Returns true if the clustering strongly converged.
-
 ### classify(int $nbClusters, int $maxIterations = null): bool
 Sort the values into clusters using the K-means algorithm.
+Returns true if the clustering strongly converged.
 
 This implementation uses the k-means++ algorithm and automatically replaces empty clusters.[More about that.](#k-means-implementation)
-
-Returns true if the clustering strongly converged.
 
 ### values(): array
 Get the values given to KMeans.
@@ -85,7 +83,7 @@ Basic vector operations.
 use IngeniozIT\Math\Vector;
 ```
 
-:star: This class could be completed with more vector operations (multiplication, substraction, angle calculation, ...). Feel free to join in.
+:star: This class could be completed with more vector operations (multiplication, substraction, angle calculation, ...). Feel free to join in. :star:
 
 ### static distance(array $pointA, array $pointB): float
 Get the distance between two points.
