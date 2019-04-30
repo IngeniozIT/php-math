@@ -125,12 +125,10 @@ class KMeans
 
         foreach ($this->values as $valueId => $value) {
             // Compute distance to all centroids
-            $distances = array_map(
-                function (array $centroid) use ($value): float {
-                    return Vector::distance($value, $centroid);
-                },
-                $this->centroids
-            );
+            $distances = [];
+            foreach ($this->centroids as $centrId => $centroid) {
+                $distances[$centrId] = Vector::distance($value, $centroid);
+            }
 
             // Assign the value to the cluster with the closest centroid
             $this->clusters[array_keys($distances, min($distances))[0]][$valueId] = $value;
@@ -172,11 +170,15 @@ class KMeans
         $centroids = $this->centroids;
 
         // Compute the distance² between each point and its closest existing centroid
-        $distances = array_map(function (array $value) use ($centroids): float {
-            return min(array_map(function (array $centroid) use ($value): float {
-                return Vector::distance($centroid, $value);
-            }, $centroids)) ** 2;
-        }, $this->values);
+        $distances = [];
+        foreach ($this->values as $valueId => $value) {
+            $minDist = null;
+            foreach ($centroids as $centroid) {
+                $dist = Vector::distance($centroid, $value);
+                $minDist = null === $minDist ? $dist : min($minDist, $dist);
+            }
+            $distances[$valueId] = $minDist ** 2;
+        }
 
         // Chose a new data point using a weighted probability distribution proportional to distance²
         $randomWeight = Random::frand(0, array_sum($distances));

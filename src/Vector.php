@@ -13,13 +13,11 @@ class Vector
      */
     public static function distance(array $pointA, array $pointB): float
     {
-        return array_sum(
-            array_map(
-                'self::subSquare',
-                $pointA,
-                $pointB
-            )
-        ) ** 0.5;
+        $sum = 0;
+        foreach ($pointA as $i => $valA) {
+            $sum += ($valA - $pointB[$i]) ** 2;
+        }
+        return $sum ** 0.5;
     }
 
     /**
@@ -29,7 +27,11 @@ class Vector
      */
     public static function length(array $vector): float
     {
-        return (array_sum(array_map('self::square', $vector))) ** 0.5;
+        $sum = 0;
+        foreach ($vector as $val) {
+            $sum += $val ** 2;
+        }
+        return $sum ** 0.5;
     }
 
     /**
@@ -70,17 +72,5 @@ class Vector
     public static function mean(array $points): array
     {
         return self::scalarDiv(self::sum($points), count($points));
-    }
-
-    // Inner methods.
-
-    protected static function square(float $val): float
-    {
-        return $val ** 2;
-    }
-
-    protected static function subSquare(float $a, float $b): float
-    {
-        return ($a - $b) ** 2;
     }
 }

@@ -5,6 +5,8 @@ namespace IngeniozIT\Math;
 
 class Random
 {
+    protected static $randMax = null;
+
     /**
      * Get a random float number between two values.
      * @param float $min The minimum value.
@@ -13,9 +15,12 @@ class Random
      */
     public static function frand(float $min = 0.0, float $max = 1.0): float
     {
+        if (null === self::$randMax) {
+            self::$randMax = getrandmax();
+        }
         return ($min === 0.0 && $max === 1.0) ?
-            rand() / getrandmax() :
-            rand() / getrandmax() * abs($max - $min) + $min;
+            rand() / self::$randMax :
+            rand() / self::$randMax * abs($max - $min) + $min;
     }
 
     /**
