@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 use IngeniozIT\Math\KMeans;
 use IngeniozIT\Math\Vector;
+use IngeniozIT\Math\Random;
 
 class KMeansTest extends TestCase
 {
@@ -88,5 +89,37 @@ class KMeansTest extends TestCase
     {
         $kMeans->classifyAndOptimize();
         $this->assertEquals(2, $kMeans->nbClusters());
+    }
+
+    public function testClassifyAndOptimizeOneCluster()
+    {
+        $values = [
+            0 => [0, 1, 2],
+            1 => [0, 1, 2],
+            2 => [0, 1, 2],
+        ];
+
+        $kMeans = new KMeans($values);
+
+        $kMeans->classifyAndOptimize();
+        $this->assertEquals(1, $kMeans->nbClusters());
+    }
+
+    public function testClassifyAndOptimizeFourClusters()
+    {
+        $values = [];
+
+        for ($i = 0; $i < 100; ++$i) {
+            $values[] = [
+                ($i % 4) * 100 + Random::frand(-1, 1),
+                ($i % 4) * 100 + Random::frand(-1, 1),
+                ($i % 4) * 100 + Random::frand(-1, 1),
+            ];
+        }
+
+        $kMeans = new KMeans($values);
+
+        $kMeans->classifyAndOptimize();
+        $this->assertEquals(4, $kMeans->nbClusters());
     }
 }

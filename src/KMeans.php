@@ -23,56 +23,104 @@ class KMeans
     protected $iteration = 0;
 
     /**
-     * Find the right number of clusters and run K-means.
+     * Run K-means while finding the right number of clusters.
      * The right number of clusters is found using the elbow method.
      * @param int|null $maxIterations The maximum number of iterations, null to run the algorithm until convergence.
      * @return bool True if the right number of clusters has been found, false otherwise.
      */
     public function classifyAndOptimize(int $maxIterations = null): bool
     {
-        $converged = false;
+        // Run with 1 cluster
+        $this->classify(1, $maxIterations);
+
+        $avgDist = $this->avgDistanceToCentroids();
+        // All values are equal, only 1 cluster is needed
+        if ($avgDist == 0) {
+            return true;
+        }
 
         $nbValues = count($this->values);
-
         $runs = [];
-        $previousDelta = 0;
-
-        for ($nbClusters = 1; $nbClusters <= $nbValues; ++$nbClusters) {
-            // Run K-means and store the results
+        $avgDistances = [];
+        $bestClustersNb = 2;
+        $bestClustersNbCount = 0;
+        for ($nbClusters = 2; $nbClusters < $nbValues; ++$nbClusters) {
             $this->classify($nbClusters, $maxIterations);
-            $runs[] = [
+            $runs[$nbClusters] = [
                 $this->avgDistanceToCentroids(),
                 $this->clusters,
                 $this->centroids,
                 $this->iteration,
             ];
+            $avgDistances[$nbClusters] = $runs[$nbClusters][0];
 
-            if ($nbClusters < 3) {
+            if ($nbClusters < min(4, $nbValues)) {
                 continue;
             }
 
-            // If the elbow has been reached on the previous step, store the results and return
-            $delta = ($runs[0][0] + $runs[2][0]) / 2 - $runs[1][0];
+            $bestNb = $this->findElbow($avgDist, $avgDistances);
 
-            if ($delta < $previousDelta) {
-                $this->avgDistance = $runs[0][0];
-                $this->clusters = $runs[0][1];
-                $this->centroids = $runs[0][2];
-                $this->iteration = $runs[0][3];
-
-                $converged = true;
-                break;
+            if ($bestNb === $bestClustersNb) {
+                if (ceil(count($avgDistances) / M_E) <= $bestClustersNbCount++) {
+                    $this->avgDistance = $runs[$bestNb][0];
+                    $this->clusters = $runs[$bestNb][1];
+                    $this->centroids = $runs[$bestNb][2];
+                    $this->iteration = $runs[$bestNb][3];
+                    return true;
+                }
+            } else {
+                foreach ($avgDistances as $nbClust => $dist) {
+                    if ($nbClust >= $bestNb) {
+                        break;
+                    }
+                    unset($runs[$nbClust]);
+                    unset($avgDistances[$nbClust]);
+                }
+                $bestClustersNb = $bestNb;
+                $bestClustersNbCount = 0;
             }
-
-            $previousDelta = $delta;
-            array_shift($runs);
         }
 
-        return $converged;
+        $this->avgDistance = $runs[$bestClustersNb][0];
+        $this->clusters = $runs[$bestClustersNb][1];
+        $this->centroids = $runs[$bestClustersNb][2];
+        $this->iteration = $runs[$bestClustersNb][3];
+
+        return false;
+    }
+
+    protected function findElbow(float $firstDist, array $distances): int
+    {
+        $distKeys = array_keys($distances);
+        $lastKey = $distKeys[count($distKeys) - 1];
+
+        $maxDist = 0;
+        $bestClusters = 0;
+        foreach ($distances as $nbClusters => $mse) {
+            if ($nbClusters >= $lastKey) {
+                break;
+            }
+            $dist = $this->distanceFromLine([$nbClusters, $mse], [1, $firstDist], [$lastKey, $distances[$lastKey]]);
+            if ($dist >= $maxDist) {
+                $maxDist = $dist;
+                $bestClusters = $nbClusters;
+            }
+        }
+
+        return $bestClusters;
+    }
+
+    protected function distanceFromLine(array $point, array $startLine, array $endLine): float
+    {
+        $A = -1 * ($endLine[1] - $startLine[1]) / ($endLine[0] - $startLine[0]);
+        $B = 1;
+        $C = -1 * $startLine[1];
+
+        return abs($A * $point[0] + $B * $point[1] + $C) / (($A ** 2 + $B ** 2) ** 0.5);
     }
 
     /**
-     * Sort a set of values into clusters using the K-means algorithm.
+     * Sort the values into clusters using the K-means algorithm.
      * @param int $nbClusters The number of clusters.
      * @param int|null $maxIterations The maximum number of iterations, null to run the algorithm until convergence.
      * @return bool True if K-means has converged, false otherwise.
@@ -119,7 +167,7 @@ class KMeans
     /**
      * Fill the clusters with the corresponding values.
      */
-    public function fillClusters()
+    protected function fillClusters()
     {
         $this->clusters = [];
 
@@ -139,7 +187,7 @@ class KMeans
         }
     }
 
-    public function moveCentroids(): bool
+    protected function moveCentroids(): bool
     {
         $centroidsMoved = false;
         foreach ($this->clusters as $clusterId => $cluster) {
@@ -165,7 +213,7 @@ class KMeans
      * Get a new centroid using the k-means++ algorithm.
      * @return array The coordinates of the new centroid.
      */
-    public function newCentroid(): array
+    protected function newCentroid(): array
     {
         $centroids = $this->centroids;
 
@@ -255,7 +303,7 @@ class KMeans
     }
 
     /**
-     * Get the centroids.
+     * Get the centroids cordinates.
      * @return array|null Null if the algorithm has not been run yet, the coordinates the each cluster otherwise.
      */
     public function centroids(): ?array

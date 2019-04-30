@@ -6,7 +6,7 @@ namespace IngeniozIT\Math;
 class Vector
 {
     /**
-     * Get the distance between two points represented by vectors.
+     * Get the distance between two points.
      * @param array $pointA The first point.
      * @param array $pointB The second point.
      * @return float
@@ -22,7 +22,7 @@ class Vector
 
     /**
      * Get the length of a vector.
-     * @param array $point The vector.
+     * @param array $vector The vector.
      * @return float
      */
     public static function length(array $vector): float
@@ -36,14 +36,14 @@ class Vector
 
     /**
      * Get the sum of multiple vectors.
-     * @param array $points A list of vectors.
+     * @param array $vectors A list of vectors.
      * @return array
      */
-    public static function sum(array $points): array
+    public static function sum(array $vectors): array
     {
-        $sum = array_shift($points);
-        foreach ($points as $point) {
-            foreach ($point as $i => $val) {
+        $sum = array_shift($vectors);
+        foreach ($vectors as $vector) {
+            foreach ($vector as $i => $val) {
                 $sum[$i] += $val;
             }
         }
@@ -65,7 +65,7 @@ class Vector
     }
 
     /**
-     * Get the average of multiple points.
+     * Get the average of several points.
      * @param array $points A list of vectors representing the points.
      * @return array
      */
