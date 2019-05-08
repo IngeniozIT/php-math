@@ -14,6 +14,12 @@ This library contains :
 
 [Technical details](#technical-details) about the algorithm implementations.
 
+# Installation
+
+```sh
+composer require ingenioz-it/php-math
+```
+
 # API
 
 ## KMeans
