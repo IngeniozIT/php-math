@@ -7,8 +7,9 @@ class Vector
 {
     /**
      * Get the distance between two points.
-     * @param array $pointA The first point.
-     * @param array $pointB The second point.
+     *
+     * @param  array $pointA The first point.
+     * @param  array $pointB The second point.
      * @return float
      */
     public static function distance(array $pointA, array $pointB): float
@@ -22,7 +23,8 @@ class Vector
 
     /**
      * Get the length of a vector.
-     * @param array $vector The vector.
+     *
+     * @param  array $vector The vector.
      * @return float
      */
     public static function length(array $vector): float
@@ -36,7 +38,8 @@ class Vector
 
     /**
      * Get the sum of multiple vectors.
-     * @param array $vectors A list of vectors.
+     *
+     * @param  array $vectors A list of vectors.
      * @return array
      */
     public static function sum(array $vectors): array
@@ -52,8 +55,9 @@ class Vector
 
     /**
      * Divide a vector by a scalar value.
-     * @param array $vector The vector.
-     * @param float $nb The scalar value.
+     *
+     * @param  array $vector The vector.
+     * @param  float $nb     The scalar value.
      * @return array
      */
     public static function scalarDiv(array $vector, float $nb): array
@@ -66,7 +70,8 @@ class Vector
 
     /**
      * Get the average of several points.
-     * @param array $points A list of vectors representing the points.
+     *
+     * @param  array $points A list of vectors representing the points.
      * @return array
      */
     public static function mean(array $points): array

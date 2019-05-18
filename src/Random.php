@@ -9,8 +9,9 @@ class Random
 
     /**
      * Get a random float number between two values.
-     * @param float $min The minimum value.
-     * @param float $max The maximum value.
+     *
+     * @param  float $min The minimum value.
+     * @param  float $max The maximum value.
      * @return float The random number.
      */
     public static function frand(float $min = 0.0, float $max = 1.0): float
@@ -25,8 +26,9 @@ class Random
 
     /**
      * Get a random float number between two values with a normal distribution.
-     * @param float $mean The mean value.
-     * @param float $stdDeviation The standard deviation.
+     *
+     * @param  float $mean         The mean value.
+     * @param  float $stdDeviation The standard deviation.
      * @return float The random number.
      */
     public static function nrand(float $mean, float $stdDeviation): float

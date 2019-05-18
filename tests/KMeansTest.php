@@ -71,9 +71,11 @@ class KMeansTest extends TestCase
         $kMeans->classify(2);
         $this->assertEquals(2, $kMeans->nbClusters());
         $centroids = $kMeans->centroids();
-        usort($centroids, function (array $a, array $b) {
-            return array_sum($a) <=> array_sum($b);
-        });
+        usort(
+            $centroids, function (array $a, array $b) {
+                return array_sum($a) <=> array_sum($b);
+            }
+        );
         $this->assertEquals([[0.25, 1.25, 2.25], [6.25, 7.25, 8.25]], $centroids);
         $this->assertEquals(4330, round($kMeans->avgDistanceToCentroids() * 10000));
 

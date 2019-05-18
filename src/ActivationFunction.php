@@ -7,7 +7,8 @@ class ActivationFunction
 {
     /**
      * Returns the number given.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float $val.
      */
     public static function identity(float $val): float
@@ -17,7 +18,8 @@ class ActivationFunction
 
     /**
      * Get the binary step value of a number.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float 1 if $val is >= 0, 0 otherwise.
      */
     public static function binaryStep(float $val): float
@@ -27,7 +29,8 @@ class ActivationFunction
 
     /**
      * Get the sigmoid value of a number.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float sigmoid($val).
      */
     public static function sigmoid(float $val): float
@@ -37,7 +40,8 @@ class ActivationFunction
 
     /**
      * Get the tanh value of a number.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float tanh($val).
      */
     public static function tanh(float $val): float
@@ -47,7 +51,8 @@ class ActivationFunction
 
     /**
      * Get the ReLU value of a number.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float ReLU($val).
      */
     public static function relu(float $val): float
@@ -57,7 +62,8 @@ class ActivationFunction
 
     /**
      * Get the leaky ReLU value of a number.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float LeakyReLU($val).
      */
     public static function leakyRelu(float $val): float
@@ -67,7 +73,8 @@ class ActivationFunction
 
     /**
      * Get the gaussian value of a number.
-     * @param float $val The value.
+     *
+     * @param  float $val The value.
      * @return float gaussian($val).
      */
     public static function gaussian(float $val): float

@@ -25,7 +25,8 @@ class KMeans
     /**
      * Run K-means while finding the right number of clusters.
      * The right number of clusters is found using the elbow method.
-     * @param int|null $maxIterations The maximum number of iterations, null to run the algorithm until convergence.
+     *
+     * @param  int|null $maxIterations The maximum number of iterations, null to run the algorithm until convergence.
      * @return bool True if the right number of clusters has been found, false otherwise.
      */
     public function classifyAndOptimize(int $maxIterations = null): bool
@@ -121,8 +122,9 @@ class KMeans
 
     /**
      * Sort the values into clusters using the K-means algorithm.
-     * @param int $nbClusters The number of clusters.
-     * @param int|null $maxIterations The maximum number of iterations, null to run the algorithm until convergence.
+     *
+     * @param  int      $nbClusters    The number of clusters.
+     * @param  int|null $maxIterations The maximum number of iterations, null to run the algorithm until convergence.
      * @return bool True if K-means has converged, false otherwise.
      */
     public function classify(int $nbClusters, int $maxIterations = null): bool
@@ -211,6 +213,7 @@ class KMeans
 
     /**
      * Get a new centroid using the k-means++ algorithm.
+     *
      * @return array The coordinates of the new centroid.
      */
     protected function newCentroid(): array
@@ -245,6 +248,7 @@ class KMeans
 
     /**
      * Get the values given to KMeans.
+     *
      * @return array The values given to the constructor.
      */
     public function values(): array
@@ -254,6 +258,7 @@ class KMeans
 
     /**
      * Get the number of clusters found in the previous run.
+     *
      * @return int|null Null if the algorithm has not run yet, the number of clusters found otherwise.
      */
     public function nbClusters(): ?int
@@ -267,6 +272,7 @@ class KMeans
 
     /**
      * Get the average distance from each point to its corresponding cluster's centroid.
+     *
      * @return float|null Null if the algorithm has not run yet, the average distance otherwise.
      */
     public function avgDistanceToCentroids(): ?float
@@ -290,6 +296,7 @@ class KMeans
 
     /**
      * Get each cluster's content.
+     *
      * @return array|null Null if the algorithm has not run yet,
      * [cluster_id_1 => [value_id_1, value_id_2, ...]] otherwise.
      */
@@ -304,6 +311,7 @@ class KMeans
 
     /**
      * Get the centroids cordinates.
+     *
      * @return array|null Null if the algorithm has not been run yet, the coordinates the each cluster otherwise.
      */
     public function centroids(): ?array

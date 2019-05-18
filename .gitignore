@@ -1,6 +1,6 @@
-# IngeniozIT\Math
-
+# Code coverage & others
 tmp/
+doc/
 
 # composer
 phpunit.xml
