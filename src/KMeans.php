@@ -49,6 +49,7 @@ class KMeans
             $this->centroids,
             $this->iteration,
         ];
+        $validation = 1 / M_E;
 
         // Run with all cluster numbers
         for ($nbClusters = 2; $nbClusters < $nbValues; ++$nbClusters) {
@@ -72,7 +73,8 @@ class KMeans
                     $this->centroids,
                     $this->iteration,
                 ];
-            } else {
+                $validation = $nbClusters / M_E;
+            } elseif (--$validation < 0) {
                 // Worse elbow distance found, last nbClusters was the right one
                 $this->avgDistance = $bestRun[0];
                 $this->clusters = $bestRun[1];
