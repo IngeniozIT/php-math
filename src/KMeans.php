@@ -35,11 +35,11 @@ class KMeans
 
         $oneClusterDistance = $this->avgDistanceToCentroids();
         // All values are equal, only 1 cluster is needed
-        if ($oneClusterDistance == 0) {
+        if (0.0 === $oneClusterDistance) {
             return;
         }
 
-        $nbValues = count($this->values);
+        $nbValues = \count($this->values);
 
         $bestNbClusters = 1;
         $bestElbowDistance = 0;
@@ -88,7 +88,7 @@ class KMeans
     protected function distanceFromLine(array $point, array $startLine, array $endLine): float
     {
         $a = -1 * ($endLine[1] - $startLine[1]) / ($endLine[0] - $startLine[0]);
-        return abs($a * $point[0] + $point[1] - $startLine[1]) / (($a ** 2) ** 0.5);
+        return abs($a * $point[0] + $point[1] - $startLine[1]) / $a;
     }
 
     /**
@@ -110,7 +110,7 @@ class KMeans
             throw new \InvalidArgumentException('Number of clusters must be at least 1.');
         }
 
-        $nbValues = count($this->values);
+        $nbValues = \count($this->values);
 
         // Initialize centroids on random points
 
@@ -199,7 +199,7 @@ class KMeans
                 $dist = Vector::distance($centroid, $value);
                 $minDist = null === $minDist ? $dist : min($minDist, $dist);
             }
-            $distances[$valueId] = $minDist ** 2;
+            $distances[$valueId] = $minDist * $minDist;
         }
 
         // Chose a new data point using a weighted probability distribution proportional to distance²
@@ -238,7 +238,7 @@ class KMeans
             return null;
         }
 
-        return count($this->clusters);
+        return \count($this->clusters);
     }
 
     /**
@@ -259,7 +259,7 @@ class KMeans
                     $sum += Vector::distance($this->centroids[$clusterId], $point);
                 }
             }
-            $this->avgDistance = $sum / count($this->values);
+            $this->avgDistance = $sum / \count($this->values);
         }
 
         return $this->avgDistance;

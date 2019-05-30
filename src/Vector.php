@@ -31,7 +31,7 @@ class Vector
     {
         $sum = 0;
         foreach ($vector as $val) {
-            $sum += $val ** 2;
+            $sum += $val * $val;
         }
         return $sum ** 0.5;
     }
@@ -76,6 +76,6 @@ class Vector
      */
     public static function mean(array $points): array
     {
-        return self::scalarDiv(self::sum($points), count($points));
+        return self::scalarDiv(self::sum($points), \count($points));
     }
 }

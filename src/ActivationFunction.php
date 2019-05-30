@@ -79,6 +79,6 @@ class ActivationFunction
      */
     public static function gaussian(float $val): float
     {
-        return exp(-1 * ($val ** 2));
+        return exp(-1 * ($val * $val));
     }
 }

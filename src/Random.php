@@ -19,7 +19,7 @@ class Random
         if (null === self::$randMax) {
             self::$randMax = getrandmax();
         }
-        return ($min === 0.0 && $max === 1.0) ?
+        return (0.0 === $min && 1.0 === $max) ?
             rand() / self::$randMax :
             rand() / self::$randMax * abs($max - $min) + $min;
     }

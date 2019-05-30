@@ -124,4 +124,24 @@ class KMeansTest extends TestCase
         $kMeans->classifyAndOptimize();
         $this->assertEquals(4, $kMeans->nbClusters());
     }
+
+    public function testClassifyAndOptimizeTenClusters()
+    {
+        $values = [];
+
+        for ($i = 0; $i < 200; ++$i) {
+            $values[] = [
+                ($i % 10) * 100 + Random::frand(-10, 10),
+                ($i % 10) * 100 + Random::frand(-10, 10),
+                ($i % 10) * 100 + Random::frand(-10, 10),
+                ($i % 10) * 100 + Random::frand(-10, 10),
+                ($i % 10) * 100 + Random::frand(-10, 10),
+            ];
+        }
+
+        $kMeans = new KMeans($values);
+
+        $kMeans->classifyAndOptimize();
+        $this->assertEquals(10, $kMeans->nbClusters());
+    }
 }
